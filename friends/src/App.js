@@ -1,28 +1,37 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { friendsList, friendsInput } from './Compoents';
+import { updateFriends, addFriends, deleteFreinds } from './Actions';
+import { connect } from 'react-redux';
+//import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  componentDidMount() {
+    this.props.updateFriends();
+  }
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <friendsInput addFriends={this.props.addFriends} />
+        <friendsList friends={this.props.friends} deleteFreinds={this.props.deleteFreinds} />
       </div>
     );
   }
 }
 
-export default App;
+const stateToProps = state => {
+  return {
+    friends: state.friends,
+    updating: state.updating,
+    error: state.error
+  };
+}
+
+export default connect(
+  stateToProps,
+  {
+    updateFriends,
+    addFriends,
+    deleteFreinds
+  }
+)(App);
